@@ -452,3 +452,47 @@ body { padding-bottom:140px; }
  .music-collapse { width:26px; height:26px; }
  body { padding-bottom:120px; }
 }
+
+
+/* v6 usability fixes: accessible player controls and floating back-to-top button. */
+.persistent-music { grid-template-columns: minmax(0, 1fr) 210px 42px; }
+.music-collapse {
+  position: relative;
+  z-index: 3;
+  align-self: center;
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  font-size: 1.25rem;
+  line-height: 1;
+  touch-action: manipulation;
+}
+.persistent-music.is-collapsed {
+  width: auto;
+  max-width: calc(100vw - 24px);
+  grid-template-columns: minmax(0, 1fr) 40px;
+  gap: 10px;
+}
+.persistent-music.is-collapsed .music-collapse { align-self: center; }
+.music-inline-hint { color: var(--muted); margin-top: 3px; font-size: .72rem; }
+.floating-top { z-index: 40; bottom: 160px; right: 16px; }
+.persistent-music.is-collapsed ~ .floating-top { bottom: 78px; }
+@media (max-width: 600px) {
+  .persistent-music {
+    grid-template-columns: minmax(0, 1fr) minmax(130px, 42%) 40px;
+    gap: 7px;
+    padding: 8px;
+  }
+  .persistent-music.is-collapsed {
+    grid-template-columns: minmax(0, 1fr) 40px;
+  }
+  .persistent-player iframe { width: 100%; aspect-ratio: 16 / 9; }
+  .music-collapse { width: 40px; height: 40px; }
+  .floating-top { bottom: 150px; right: 14px; }
+  .persistent-music.is-collapsed ~ .floating-top { bottom: 76px; }
+}

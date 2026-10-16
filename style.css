@@ -496,3 +496,23 @@ body { padding-bottom:140px; }
   .floating-top { bottom: 150px; right: 14px; }
   .persistent-music.is-collapsed ~ .floating-top { bottom: 76px; }
 }
+
+
+/* B layout: one continuous page; the home and inline YouTube player stay mounted while scrolling. */
+.single-view { display:block; }
+#view-guide, #view-creative, #view-works { margin-top: 26px; scroll-margin-top: 92px; }
+#view-home { scroll-margin-top: 88px; }
+.music-section { margin: 24px 0 28px; padding: clamp(18px, 4vw, 30px); border: 1px solid var(--line); background: var(--surface); box-shadow: var(--shadow); }
+.music-section-heading { display:flex; flex-wrap:wrap; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:18px; }
+.music-section-heading h2 { font:600 clamp(.9rem, 3vw, 1.1rem) -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing:.08em; }
+.music-card { display:grid; grid-template-columns:minmax(0, .8fr) minmax(0, 1.2fr); gap:22px; align-items:center; }
+.music-description { display:flex; flex-direction:column; gap:5px; }
+.music-description strong { font-size:1.12rem; }
+.music-description span { color:var(--muted); font: .78rem -apple-system, BlinkMacSystemFont, sans-serif; }
+.music-description p { margin:10px 0 0; color:var(--muted); font-size:.85rem; line-height:1.8; }
+.music-embed { overflow:hidden; border-radius:5px; background:#111; }
+.music-embed iframe { display:block; width:100%; aspect-ratio:16 / 9; border:0; }
+/* The old fixed player is no longer used in the scrolling layout. */
+.persistent-music { display:none !important; }
+body { padding-bottom: 30px; }
+@media(max-width:600px) { .music-card { grid-template-columns:1fr; gap:14px; } .music-section { margin:18px 0 22px; padding:17px 14px; } }

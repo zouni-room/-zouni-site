@@ -424,3 +424,31 @@ body {
   .agate-specimen { width: 100%; transform: rotate(5deg) scale(1.1); margin-right: -10px; }
   .music-layout { grid-template-columns: 1fr; gap: 15px; }
 }
+
+
+/* Single-page navigation: the music iframe stays mounted while content views change. */
+[hidden] { display: none !important; }
+.site-nav button { appearance:none; border:0; background:transparent; color:var(--text); padding:8px 10px; font:inherit; cursor:pointer; border-bottom:2px solid transparent; }
+.site-nav button[aria-current="page"] { color:var(--accent-strong); border-bottom-color:var(--accent); }
+.page-banner-button { width:100%; text-align:left; cursor:pointer; font:inherit; }
+.persistent-music { position:fixed; z-index:30; left: max(12px, calc((100vw - 940px)/2)); bottom:12px; width:min(480px, calc(100vw - 24px)); display:grid; grid-template-columns:minmax(0,1fr) 190px 28px; align-items:center; gap:12px; padding:10px; border:1px solid var(--line); border-radius:14px; background:var(--surface); color:var(--text); box-shadow:0 8px 30px rgba(0,0,0,.28); }
+.persistent-music-label { min-width:0; display:flex; flex-direction:column; gap:3px; font-size:.75rem; line-height:1.35; }
+.persistent-music-label strong { font-size:.9rem; }
+.persistent-music-label a { color:var(--accent-strong); text-decoration:none; margin-top:3px; }
+.music-mini-kicker { color:var(--muted); font-size:.58rem; letter-spacing:.06em; }
+.persistent-player { overflow:hidden; background:#111; border-radius:7px; }
+.persistent-player iframe { display:block; width:100%; aspect-ratio:16/9; border:0; }
+.music-collapse { align-self:start; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--text); width:28px; height:28px; cursor:pointer; }
+.persistent-music.is-collapsed { width:auto; grid-template-columns:minmax(0,1fr) 28px; }
+.persistent-music.is-collapsed .persistent-player { display:none; }
+.persistent-music.is-collapsed .persistent-music-label > :not(strong) { display:none; }
+body { padding-bottom:140px; }
+@media (max-width:600px) {
+ .site-nav button { padding:10px 8px; text-align:left; width:100%; }
+ .persistent-music { left:8px; bottom:8px; width:calc(100vw - 16px); grid-template-columns:minmax(0,1fr) 150px 26px; gap:8px; padding:8px; border-radius:12px; }
+ .persistent-music-label { font-size:.68rem; }
+ .persistent-music-label strong { font-size:.82rem; }
+ .music-mini-kicker { font-size:.5rem; }
+ .music-collapse { width:26px; height:26px; }
+ body { padding-bottom:120px; }
+}

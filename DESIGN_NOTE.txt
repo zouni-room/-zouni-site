@@ -1,9 +1,22 @@
-瑪瑙 / AGATE デザインメモ
+瑪瑙 / AGATE — Banded Agate × After Hours edition
 
-・乳白色とグレージュを土台に、瑪瑙を思わせるセージグリーン／苔色をアクセントにしています。
-・トップの背景には、瑪瑙の縞を連想する控えめな曲線状グラデーションをCSSで加えています（画像素材なし）。
-・見出し、リンク、ページ案内バナー、検索欄などを同じ配色に統一しました。
-・ダークモードは深い森色と淡いセージグリーンに切り替わります。
-・スマホメニュー、ダークモード、作品名検索、作品ごとの開閉、ページ上部へ戻る機能は維持しています。
+Design idea:
+- Actual agate is represented by a visible banded-stone SVG illustration, plus layered mineral-band patterns on the banners and backgrounds.
+- Palette combines milky quartz-like cream, gray-lilac, muted moss/sage, and deep after-hours indigo/charcoal.
+- The site draws on the mood of Ayase's 「夜撫でるメノウ」 without using lyrics or official cover art.
+- The homepage includes an embedded YouTube player for Ayase's official music video (not autoplaying), plus a direct YouTube link.
+- The top page has only three main banners: guide, creative, and supported works. Name/marker information remains within the guide page, not a separate banner.
 
-GitHub Pagesへの更新：ZIPを解凍し、中のHTML/CSS/JSファイルをリポジトリ直下へアップロードして Commit changes を押してください。既存の index.html などを上書きします。
+Files:
+- index.html: home page and embedded music player
+- guide.html: stance, interaction, waiting-room notes, name/marker explanation
+- creative.html: creative work information
+- works.html: supported works and character search
+- style.css: responsive design, agate palette and theme switch
+- script.js: mobile menu, theme switch, character search, back-to-top
+- agate-stone.svg: original vector illustration of layered agate bands
+
+GitHub Pages update:
+1. Unzip this archive.
+2. Upload the files inside the ZIP (not the enclosing folder) to the root of the existing GitHub repository.
+3. Replace files with matching names, add agate-stone.svg, then commit the changes.

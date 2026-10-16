@@ -1,11 +1,13 @@
-瑪瑙 / AGATE｜項目別ページ版
-ZIP内のファイル:
-index.html = トップ
-guide.html = スタンス、お名前・目印、交流、待機、その他
-creative.html = 創作
-works.html = 対応作品（作品ごとに開閉・検索）
-style.css = 瑪瑙をイメージしたセージグリーン・乳白色・グレージュの配色
-script.js = ダークモード、スマホメニュー、検索、上へ戻る、フェードイン
+瑪瑙 / AGATE — Banded Agate × After Hours edition
 
-既存のサイト内容を元にセクションを移動して分割しています。文章自体は削除せず、作品一覧も元の記載を維持しています。
-更新時はZIPをそのままではなく、解凍した中の6ファイルをリポジトリ直下へアップロードして Commit changes を押してください。古いファイルを先に削除しないでください。
+This is a replacement set for the existing GitHub Pages site.
+Included: index.html, guide.html, creative.html, works.html, style.css, script.js, agate-stone.svg, DESIGN_NOTE.txt.
+
+The homepage now features an original banded agate illustration and an embedded YouTube player/link for Ayase's 「夜撫でるメノウ」 official music video. Playback is user-initiated (no autoplay). The design uses actual agate-like layered bands and mineral colors combined with a quiet night palette.
+
+GitHub Pages update:
+1. Unzip this archive.
+2. Upload the files inside the ZIP (not the enclosing folder) to the root of the existing GitHub repository.
+3. Replace files with matching names, add agate-stone.svg, then commit the changes.
+
+The homepage has three main banners only: guide, creative, and supported works. Name/marker information remains inside guide.html, not as a separate banner.

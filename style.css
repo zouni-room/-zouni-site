@@ -205,3 +205,37 @@ html.js-enabled .reveal.is-visible { opacity: 1; transform: translateY(0); }
   line-height: 1;
 }
 .music-section .text-link { display: inline-block; margin: 8px 0; }
+/* バナー表示の確認用・既存デザインを維持 */
+.banner-grid {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.page-banner {
+  display: flex !important;
+  position: relative;
+  min-height: 150px;
+  padding: 22px 26px;
+  overflow: hidden;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  text-decoration: none;
+}
+
+.page-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(115deg, #e5d5c1, #fffaf2 46%, #d8c6b1);
+}
+
+.banner-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.banner-arrow {
+  z-index: 1;
+}

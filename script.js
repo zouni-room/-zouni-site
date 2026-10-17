@@ -1,95 +1,53 @@
 document.documentElement.classList.add("js-enabled");
-
-const menuToggle = document.getElementById("menuToggle");
-const siteNav = document.getElementById("siteNav");
-menuToggle?.addEventListener("click", () => {
-  const isOpen = siteNav.classList.toggle("open");
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
-});
-siteNav?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
-  siteNav.classList.remove("open");
-  menuToggle?.setAttribute("aria-expanded", "false");
-}));
-
-// Theme switch: remembers the choice on this device when browser storage is available.
-const themeToggle = document.getElementById("themeToggle");
-const root = document.documentElement;
-function applyTheme(theme) {
-  root.dataset.theme = theme;
-  const dark = theme === "dark";
-  if (themeToggle) {
-    themeToggle.textContent = dark ? "☀" : "☾";
-    themeToggle.setAttribute("aria-label", dark ? "ライトモードに切り替え" : "ダークモードに切り替え");
-  }
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  themeColor?.setAttribute("content", dark ? "#202123" : "#f4f4f2");
-}
-let savedTheme = "light";
-try { savedTheme = localStorage.getItem("zouni-theme") || "light"; } catch (_) {}
-applyTheme(savedTheme);
-themeToggle?.addEventListener("click", () => {
-  const next = root.dataset.theme === "dark" ? "light" : "dark";
-  applyTheme(next);
-  try { localStorage.setItem("zouni-theme", next); } catch (_) {}
-});
-
-// Search by work title, listed characters, and common abbreviations.
-const search = document.getElementById("characterSearch");
-const clearSearch = document.getElementById("clearSearch");
-const works = Array.from(document.querySelectorAll(".work"));
-const status = document.getElementById("searchStatus");
-const searchAliases = new Map([
-  ["転生したらスライムだった件", "転スラ てんすら tensura"],
-  ["プロジェクトセカイ カラフルステージ feat.初音ミク", "プロセカ pjsk project sekai"],
-  ["ツイステッドワンダーランド", "ツイステ twst"],
-  ["SHOW BY ROCK!!", "sb69 ショウバイロック"],
-  ["呪術廻戦", "じゅじゅつ jujutsu"],
-  ["薬屋のひとりごと", "薬屋 くすりや kusuriya"],
-  ["ラブライブ！", "ラブライブ lovelive μ's aqours 虹ヶ咲"],
-  ["ピュティフィ", "ぷてぃふぃ"],
-  ["アイカツ！", "アイカツ aikatsu"]
-]);
-function runSearch() {
-  const query = (search?.value || "").trim().toLocaleLowerCase("ja");
-  let shown = 0;
-  works.forEach((work) => {
-    const title = work.querySelector("summary")?.textContent || "";
-    const aliases = searchAliases.get(title.trim()) || "";
-    const haystack = `${work.textContent} ${aliases}`.toLocaleLowerCase("ja");
-    const matches = !query || haystack.includes(query);
-    work.hidden = !matches;
-    if (matches) {
-      shown++;
-      if (query) work.open = true;
-    }
+(() => {
+ const root=document.documentElement, saved=localStorage.getItem("agate-theme");
+ if(saved==="dark"||saved==="light") root.dataset.theme=saved;
+ const themeBtn=document.getElementById("themeToggle");
+ function syncTheme(){if(themeBtn){const d=root.dataset.theme==="dark";themeBtn.textContent=d?"☀":"☾";themeBtn.setAttribute("aria-label",d?"ライトモードに切り替え":"ダークモードに切り替え");}}
+ if(themeBtn){themeBtn.addEventListener("click",()=>{root.dataset.theme=root.dataset.theme==="dark"?"light":"dark";localStorage.setItem("agate-theme",root.dataset.theme);syncTheme();});syncTheme();}
+ const mb=document.getElementById("menuToggle"), nav=document.getElementById("siteNav");
+ if(mb&&nav)mb.addEventListener("click",()=>{let o=nav.classList.toggle("open");mb.setAttribute("aria-expanded",String(o));});
+ const search=document.getElementById("characterSearch"), status=document.getElementById("searchStatus"), clear=document.getElementById("clearSearch"), works=[...document.querySelectorAll(".work")];
+ // Common alternate readings / spellings. Search is normalized to the canonical display name.
+ const searchAliases = {
+   "まおまお":"猫猫", "マオマオ":"猫猫", "mao mao":"猫猫", "maomao":"猫猫",
+   "じんし":"壬氏", "ジンシ":"壬氏",
+   "りむる":"リムル", "リムル":"リムル"
+ };
+ function normalizeSearch(s){
+   return String(s||"").normalize("NFKC").toLocaleLowerCase().replace(/[　\s・･\-‐‑‒–—―]/g,"").trim();
+ }
+ function filter(){
+  if(!search)return;
+  const raw=search.value.trim();
+  const q=normalizeSearch(raw);
+  const canonical=normalizeSearch(searchAliases[raw] || searchAliases[raw.toLocaleLowerCase()] || raw);
+  let count=0, matchedWorkTitle=false, matchedCharacter=false;
+  works.forEach(w=>{
+    const title=(w.querySelector("summary")?.textContent||"");
+    const details=[...w.querySelectorAll("p")].map(p=>p.textContent).join(" ");
+    const titleNorm=normalizeSearch(title);
+    const detailsNorm=normalizeSearch(details);
+    const titleHit=!!q && (titleNorm.includes(q) || titleNorm.includes(canonical));
+    const characterHit=!!q && (detailsNorm.includes(q) || detailsNorm.includes(canonical));
+    const ok=!q || titleHit || characterHit;
+    w.hidden=!ok;
+    if(ok && q) count++;
+    if(ok && q){ if(titleHit) matchedWorkTitle=true; if(characterHit) matchedCharacter=true; }
+    // If a character search matches, expand the matching work so the character is visible.
+    if(characterHit && w.tagName.toLowerCase()==="details") w.open=true;
   });
-  if (clearSearch) clearSearch.hidden = !query;
-  if (!query) status.textContent = "作品名・キャラクター名・一部の略称で検索できます。";
-  else if (shown) status.textContent = `${shown}件の作品が見つかりました。該当作品を開いて表示しています。`;
-  else status.textContent = "該当する作品・キャラクターは見つかりませんでした。別の表記でも試してみてください。";
-}
-search?.addEventListener("input", runSearch);
-clearSearch?.addEventListener("click", () => { if (search) { search.value = ""; runSearch(); search.focus(); } });
-
-// Soft reveal when sections enter the screen; no animation for reduced-motion settings.
-const revealItems = document.querySelectorAll(".reveal");
-if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  const observer = new IntersectionObserver((entries, currentObserver) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-        currentObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  revealItems.forEach((item) => observer.observe(item));
-} else {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
-}
-
-// Floating back-to-top button.
-const floatingTop = document.getElementById("floatingTop");
-function updateTopButton() { floatingTop?.classList.toggle("visible", window.scrollY > 360); }
-window.addEventListener("scroll", updateTopButton, { passive: true });
-updateTopButton();
-floatingTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+  if(status){
+    if(!q) status.textContent="作品名・キャラクター名で絞り込めます。";
+    else if(matchedWorkTitle && !matchedCharacter) status.textContent=`${count}件の作品が見つかりました。該当作品を開いて表示しています。`;
+    else if(matchedCharacter && !matchedWorkTitle) status.textContent=`${count}件のキャラクターが見つかりました。該当作品を開いて表示しています。`;
+    else if(matchedWorkTitle && matchedCharacter) status.textContent=`${count}件の作品・キャラクターが見つかりました。該当項目を開いて表示しています。`;
+    else status.textContent="該当する作品・キャラクターは見つかりませんでした。";
+  }
+  if(clear)clear.hidden=!q;
+ }
+ if(search)search.addEventListener("input",filter);
+ if(clear)clear.addEventListener("click",()=>{search.value="";filter();search.focus();});
+ const top=document.getElementById("floatingTop");if(top){const f=()=>top.classList.toggle("visible",scrollY>350);addEventListener("scroll",f,{passive:true});f();}
+ const els=[...document.querySelectorAll(".reveal")];if("IntersectionObserver"in window){const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("is-visible");ob.unobserve(e.target);}}),{threshold:.08});els.forEach(e=>ob.observe(e));}else els.forEach(e=>e.classList.add("is-visible"));
+})();

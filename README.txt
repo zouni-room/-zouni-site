@@ -1,6 +1,7 @@
-瑪瑙 / AGATE — B方式（縦スクロール）版
+瑪瑙 / AGATE — ページ移動方式 v8
 
-GitHub Pagesのリポジトリ直下で、index.html / style.css / script.js を置き換えてください。
-今回の方式は、トップ・YouTubeプレイヤー・各コンテンツを1つのHTMLに置き、バナーを押すと該当セクションまでスクロールします。
-ページを切り替えてiframeを作り直さないため、サイト内操作による再読み込みで再生が止まるのを避けます。
-Android/YouTube側の制限による停止までは保証できません。
+ZIP内のファイルをGitHubリポジトリ直下にアップロードし、同名ファイルを置き換えてください。
+対象: index.html / guide.html / creative.html / works.html / style.css / script.js
+トップのバナーはそれぞれのページへ移動する従来方式です。
+YouTubeはトップページのリンクから原曲を開く方式にしました。埋め込み再生は使用しません。
+ページ上部へ戻る矢印は #top への通常リンクにして、JavaScriptに依存せず動作するようにしています。

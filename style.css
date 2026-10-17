@@ -239,3 +239,182 @@ html.js-enabled .reveal.is-visible { opacity: 1; transform: translateY(0); }
 .banner-arrow {
   z-index: 1;
 }
+/* ========================================
+   瑪瑙 / AGATE
+   アクセントカラー調整：落ち着いたくすみカラー
+   既存のレイアウト・機能は維持
+======================================== */
+
+/* 全体のアクセントカラー */
+:root {
+  --accent: #87969d;
+  --accent-strong: #586b75;
+  --soft: #e1e6e7;
+}
+
+/* ダークモードのアクセントカラー */
+:root[data-theme="dark"] {
+  --accent: #a9bac1;
+  --accent-strong: #d0dce0;
+  --soft: #414c50;
+}
+
+/* バナー共通 */
+.page-banner {
+  color: #42484b;
+  background: #e1e4e5;
+  border-color: #c7ced1;
+}
+
+.page-banner::before {
+  background: linear-gradient(
+    115deg,
+    #d8dde0,
+    #eef0f0 52%,
+    #cbd3d6
+  );
+}
+
+.page-banner::after {
+  color: rgba(83, 104, 113, .12);
+}
+
+/* 方針・交流 */
+.banner-guide::before,
+.banner-name::before {
+  background: linear-gradient(
+    115deg,
+    #d8dde0,
+    #eef0f0 52%,
+    #cbd3d6
+  );
+}
+
+/* 待機・入室 */
+.banner-waiting::before {
+  background: linear-gradient(
+    115deg,
+    #ddd5e3,
+    #f0edf3 52%,
+    #d2c7dc
+  );
+}
+
+/* 対応可能作品 */
+.banner-works::before {
+  background: linear-gradient(
+    115deg,
+    #d7e0d4,
+    #edf1eb 52%,
+    #c8d5c4
+  );
+}
+
+/* バナー内の文字・矢印 */
+.banner-kicker {
+  color: #586b75;
+}
+
+.banner-title {
+  color: #42484b;
+}
+
+.banner-description {
+  color: #626c70;
+}
+
+.banner-arrow {
+  color: #586b75;
+  background: rgba(250, 250, 248, .86);
+  border-color: rgba(110, 129, 137, .6);
+}
+
+/* 小さなリンク：控えめなグレージュ */
+.minor-page-link {
+  color: var(--muted);
+  border-bottom-color: var(--line);
+}
+
+.minor-page-link:hover {
+  color: var(--accent-strong);
+  border-bottom-color: var(--accent);
+}
+
+/* ページ間リンク・上部へ戻るリンク */
+.page-links a,
+.back-top {
+  transition:
+    color .2s ease,
+    border-color .2s ease,
+    background-color .2s ease;
+}
+
+.page-links a:hover,
+.back-top:hover {
+  color: var(--accent-strong);
+  border-color: var(--accent);
+  background: var(--surface-alt);
+}
+
+/* ダークモードのバナー */
+:root[data-theme="dark"] .page-banner {
+  color: #e8e9e8;
+  border-color: #596166;
+}
+
+:root[data-theme="dark"] .page-banner::before {
+  background: linear-gradient(
+    115deg,
+    #39454b,
+    #303a40 52%,
+    #465158
+  );
+}
+
+:root[data-theme="dark"] .banner-guide::before,
+:root[data-theme="dark"] .banner-name::before {
+  background: linear-gradient(
+    115deg,
+    #39454b,
+    #303a40 52%,
+    #465158
+  );
+}
+
+:root[data-theme="dark"] .banner-waiting::before {
+  background: linear-gradient(
+    115deg,
+    #463f4d,
+    #38333f 52%,
+    #51475a
+  );
+}
+
+:root[data-theme="dark"] .banner-works::before {
+  background: linear-gradient(
+    115deg,
+    #39463b,
+    #303a32 52%,
+    #465448
+  );
+}
+
+:root[data-theme="dark"] .banner-kicker {
+  color: #d1dce0;
+}
+
+:root[data-theme="dark"] .banner-title {
+  color: #f0f0ed;
+}
+
+:root[data-theme="dark"] .banner-description {
+  color: #d1d1ce;
+}
+
+:root[data-theme="dark"] .banner-arrow {
+  color: #d5e0e3;
+  background: rgba(40, 43, 44, .86);
+  border-color: #71828a;
+}
+
+/* 縞模様などの装飾は追加しない */

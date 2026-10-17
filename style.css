@@ -418,3 +418,7 @@ html.js-enabled .reveal.is-visible { opacity: 1; transform: translateY(0); }
 }
 
 /* 縞模様などの装飾は追加しない */
+/* 瑪瑙 / AGATE｜バナーの＊装飾を非表示 */
+.page-banner::after {
+content: none !important;
+}

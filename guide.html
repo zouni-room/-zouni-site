@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="ja">
 <head>
@@ -23,8 +22,10 @@
     <nav id="siteNav" class="site-nav" aria-label="サイト内ナビゲーション">
       <a href="index.html">トップ</a>
       <a href="guide.html" aria-current="page">方針・交流</a>
+      <a href="waiting.html">待機・入室</a>
       <a href="creative.html">創作</a>
       <a href="works.html">対応作品</a>
+      <a href="rol.html">ロル置き場</a>
     </nav>
   </div>
 </header>
@@ -36,7 +37,6 @@
     <p>好きなものを、好きなときに。お互いに無理のない距離感で。</p>
   </div>
 
-  <!-- 初めての方へ -->
   <section class="content-section" id="first-visit">
     <div class="section-heading">
       <span class="section-no">01</span>
@@ -54,13 +54,13 @@
         <li>交流の距離感や苦手なことは「スタンスについて」へ。</li>
         <li>名前や目印の付け方は「お名前・目印について」へ。</li>
         <li>交流の内容や関係性については「交流について」へ。</li>
+        <li>待機や入室については「待機・入室について」へ。</li>
         <li>対応可能な作品・キャラクターは「対応作品」へ。</li>
       </ul>
       <p>分からないことがあれば、その場で聞いてもらって大丈夫です。</p>
     </div>
   </section>
 
-  <!-- ページ内目次 -->
   <section class="content-section" id="guide-index">
     <div class="section-heading">
       <span class="section-no">INDEX</span>
@@ -70,8 +70,6 @@
       <a href="#stance">02　スタンスについて ↗</a>
       <a href="#name-mark">03　お名前・目印について ↗</a>
       <a href="#交流">04　交流について ↗</a>
-      <a href="#待機">05　待機について ↗</a>
-      <a href="#other">06　その他 ↗</a>
       <a href="#terms">用語ミニ解説 ↗</a>
     </nav>
   </section>
@@ -103,7 +101,6 @@
     <p>逆に、毎回初対面としての対応を希望される場合は、参加者パネル等にその旨をご記載ください。<strong>（記載がない場合は通常対応となります）</strong></p>
     <p>※トリップの付け方が分からない場合はお気軽にお聞きください！</p>
 
-    <!-- コピー用テンプレート -->
     <div class="agate-card">
       <p class="mini-label">COPY TEMPLATE / 目印の例</p>
       <p>必要な項目だけ書き換えて使ってください。</p>
@@ -139,26 +136,6 @@
     <p>ただ名前を借りて話すだけというよりは、<strong>ある程度の水準のなりきり解像度</strong>は求めたいです。友人、恋人、同僚、主従、初対面など、関係性の相談もお気軽にどうぞ。</p>
   </section>
 
-  <section class="content-section" id="待機">
-    <div class="section-heading">
-      <span class="section-no">05</span>
-      <h2>待機について</h2>
-    </div>
-    <p>待機中は口調拝借したまま背後透け透けで喋りがちです。そのため、完なりや終始キャラ維持を求める方には合わないかもしれません。</p>
-    <p>無人時待機、書き置き大歓迎ですがあくまで自室なので<strong>自分の部屋のように扱いすぎる行為（独占的、占有的な使い方）</strong>は御遠慮ください。荒らし対策やあんまり喋られてると返せなかったことが申し訳なくなってしまうが故の取り決めです、ご了承ください。</p>
-  </section>
-
-  <section class="content-section" id="other">
-    <div class="section-heading">
-      <span class="section-no">06</span>
-      <h2>その他</h2>
-    </div>
-    <p><strong>ゼロイチ通知はご自由に！</strong><br>
-    こちらも通知を付けているため、反応できるタイミングでふらっと対応する場合があります。</p>
-    <p>過去ログ5ページ目突入！ 常時閉めてますが見たい方がいればその都度空けます。全然好き勝手読まれても支障はないのですが多分読みにくいです。</p>
-  </section>
-
-  <!-- 用語ミニ解説 -->
   <section class="content-section" id="terms">
     <div class="section-heading">
       <span class="section-no">GLOSSARY</span>
@@ -202,7 +179,7 @@
 
   <div class="page-links">
     <a href="index.html">← トップへ</a>
-    <a href="creative.html">創作 →</a>
+    <a href="waiting.html">待機・入室 →</a>
     <a href="works.html">対応作品 →</a>
   </div>
 
@@ -222,6 +199,8 @@
   const button = document.getElementById("copyMark");
   const template = document.getElementById("markTemplate");
   const status = document.getElementById("copyStatus");
+
+  if (!button || !template || !status) return;
 
   button.addEventListener("click", async function () {
     const text = template.textContent;
@@ -245,7 +224,7 @@
       status.textContent = "コピーしました！";
     } catch (error) {
       status.textContent =
-        "自動コピーできませんでした。下のテンプレートを長押ししてコピーしてください。";
+        "自動コピーできませんでした。テンプレートを長押ししてコピーしてください。";
     }
   });
 })();

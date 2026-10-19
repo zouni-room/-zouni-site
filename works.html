@@ -335,14 +335,14 @@
       boldCharacters(work, characters);
     });
 
-    if (workCount === 0 && characterCount === 0) {
+        if (workCount === 0 && characterCount === 0) {
       status.textContent = "該当する作品・キャラクターは見つかりませんでした。";
     } else if (workCount > 0 && characterCount > 0) {
-      status.textContent = `$DIL0件の作品・$DIL1人のキャラクターが見つかりました。`;
+      status.textContent = workCount + "件の作品・" + characterCount + "人のキャラクターが見つかりました。";
     } else if (workCount > 0) {
-      status.textContent = `$DIL2件の作品が見つかりました。`;
+      status.textContent = workCount + "件の作品が見つかりました。";
     } else {
-      status.textContent = `$DIL3人のキャラクターが見つかりました。`;
+      status.textContent = characterCount + "人のキャラクターが見つかりました。";
     }
   }
 

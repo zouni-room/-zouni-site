@@ -7,6 +7,26 @@
   <meta name="description" content="瑪瑙｜なりきり・交流案内">
   <title>対応可能作品｜瑪瑙</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .search-highlight {
+      font-weight: 700;
+      border-radius: 3px;
+      padding: 0 2px;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+
+    .search-highlight-work {
+      background-color: #dedede;
+      color: #222222;
+    }
+
+    .search-highlight-character {
+      background-color: #eeeeee;
+      color: #222222;
+    }
+  </style>
 </head>
 
 <body>
@@ -164,11 +184,11 @@
 
 <script>
 (() => {
-  const input = document.getElementById("characterSearch");
+  const searchInput = document.getElementById("characterSearch");
   const status = document.getElementById("searchStatus");
   const works = [...document.querySelectorAll("#worksList .work")];
 
-  if (!input || !status || !works.length) return;
+  if (!searchInput || !status || !works.length) return;
 
   const aliases = [
     { name: "猫猫", aliases: ["まおまお", "マオマオ", "maomao", "mao mao"] },
@@ -191,10 +211,6 @@
       .replace(/[\s　・!！?？ー―‐\-／/.,。、「」『』【】（）()]/g, "");
   }
 
-  function escapeRegExp(value) {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  }
-
   const originals = works.map(work => ({
     work,
     summary: work.querySelector("summary")?.innerHTML || "",
@@ -214,97 +230,19 @@
   }
 
   function getCharacterMatches(work, query) {
-    const names = (work.dataset.characters || "").split("|").filter(Boolean);
-    const found = [];
+    const names = (work.dataset.characters || "")
+      .split("|")
+      .filter(Boolean);
 
-    names.forEach(name => {
+    return names.filter(name => {
       const entry = aliases.find(item => item.name === name);
       const searchNames = entry ? [name, ...entry.aliases] : [name];
 
-      if (searchNames.some(value => normalize(value).includes(query))) {
-        found.push(name);
-      }
+      return searchNames.some(value => normalize(value).includes(query));
     });
-
-    return found;
   }
 
-  function boldWorkTitle(work) {
-  const summary = work.querySelector("summary");
-  if (!summary) return;
-
-  const title = work.dataset.work || "";
-  if (!title) return;
-
-  const walker = document.createTreeWalker(
-    summary,
-    NodeFilter.SHOW_TEXT
-  );
-
-  const textNodes = [];
-  while (walker.nextNode()) {
-    textNodes.push(walker.currentNode);
-  }
-
-  textNodes.forEach((node) => {
-    const text = node.nodeValue;
-    if (!text || !text.includes(title)) return;
-
-    const fragment = document.createDocumentFragment();
-    let start = 0;
-    let index;
-
-    while ((index = text.indexOf(title, start)) !== -1) {
-      fragment.appendChild(
-        document.createTextNode(text.slice(start, index))
-      );
-
-      const strong = document.createElement("strong");
-      strong.className = "search-highlight search-highlight-work";
-      strong.textContent = title;
-      fragment.appendChild(strong);
-
-      start = index + title.length;
-    }
-
-    fragment.appendChild(
-      document.createTextNode(text.slice(start))
-    );
-
-    node.parentNode.replaceChild(fragment, node);
-  });
-}
-
-function boldCharacters(work, names) {
-  if (!names || names.length === 0) return;
-
-  const walker = document.createTreeWalker(
-    work,
-    NodeFilter.SHOW_TEXT
-  );
-
-  const textNodes = [];
-  while (walker.nextNode()) {
-    textNodes.push(walker.currentNode);
-  }
-
-  const escapedNames = names
-    .filter(Boolean)
-    .sort((a, b) => b.length - a.length)
-    .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-
-  if (escapedNames.length === 0) return;
-
-  const regex = new RegExp(escapedNames.join("|"), "gi");
-
-  textNodes.forEach((node) => {
-    if (
-      node.parentElement &&
-      node.parentElement.closest("summary")
-    ) {
-      return;
-    }
-
+  function highlightTextNode(node, regex, className) {
     const text = node.nodeValue;
     if (!text) return;
 
@@ -322,7 +260,7 @@ function boldCharacters(work, names) {
       );
 
       const strong = document.createElement("strong");
-      strong.className = "search-highlight search-highlight-character";
+      strong.className = className;
       strong.textContent = match[0];
       fragment.appendChild(strong);
 
@@ -334,44 +272,104 @@ function boldCharacters(work, names) {
     );
 
     node.parentNode.replaceChild(fragment, node);
-  });
-}
+  }
 
-function restoreOriginals() {
-  works.forEach((work) => {
-    const original = originalHTML.get(work);
-    if (original !== undefined) {
-      work.innerHTML = original;
-    }
-  });
-}
+  function boldWorkTitle(work) {
+    const summary = work.querySelector("summary");
+    if (!summary) return;
 
-function search() {
-  restoreOriginals();
+    const title = work.dataset.work || "";
+    if (!title) return;
 
-  const query = searchInput.value.trim().toLowerCase();
-  let workCount = 0;
-  let characterCount = 0;
-
-  works.forEach((work) => {
-    const title = (work.dataset.work || "").toLowerCase();
-    const characters = (work.dataset.characters || "")
-      .split(",")
-      .map((name) => name.trim())
-      .filter(Boolean);
-
-    const matchedCharacters = characters.filter((name) =>
-      name.toLowerCase().includes(query)
+    const walker = document.createTreeWalker(
+      summary,
+      NodeFilter.SHOW_TEXT
     );
 
-    const titleMatches = title.includes(query);
-    const characterMatches = matchedCharacters.length > 0;
-    const matches = !query || titleMatches || characterMatches;
+    const textNodes = [];
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
 
-    work.hidden = !matches;
+    const regex = new RegExp(
+      title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "g"
+    );
 
-    if (matches) {
+    textNodes.forEach(node => {
+      highlightTextNode(
+        node,
+        regex,
+        "search-highlight search-highlight-work"
+      );
+    });
+  }
+
+  function boldCharacters(work, names) {
+    if (!names || names.length === 0) return;
+
+    const walker = document.createTreeWalker(
+      work,
+      NodeFilter.SHOW_TEXT
+    );
+
+    const textNodes = [];
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
+
+    const escapedNames = names
+      .filter(Boolean)
+      .sort((a, b) => b.length - a.length)
+      .map(name => name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+
+    if (!escapedNames.length) return;
+
+    const regex = new RegExp(escapedNames.join("|"), "g");
+
+    textNodes.forEach(node => {
+      if (
+        node.parentElement &&
+        node.parentElement.closest("summary")
+      ) {
+        return;
+      }
+
+      highlightTextNode(
+        node,
+        regex,
+        "search-highlight search-highlight-character"
+      );
+    });
+  }
+
+  function search() {
+    restoreOriginals();
+
+    const rawQuery = searchInput.value.trim();
+    const query = normalize(rawQuery);
+
+    let workCount = 0;
+    let characterCount = 0;
+
+    works.forEach(work => {
+      const title = normalize(work.dataset.work || "");
+      const titleMatches = query !== "" && title.includes(query);
+      const matchedCharacters = query
+        ? getCharacterMatches(work, query)
+        : [];
+
+      const matches = !query || titleMatches || matchedCharacters.length > 0;
+
+      work.hidden = !matches;
+
+      if (!matches) return;
+
       workCount++;
+
+      const allCharacters = (work.dataset.characters || "")
+        .split("|")
+        .filter(Boolean);
 
       if (query) {
         characterCount += matchedCharacters.length;
@@ -380,31 +378,32 @@ function search() {
           boldWorkTitle(work);
         }
 
-        if (characterMatches) {
+        if (matchedCharacters.length > 0) {
           boldCharacters(work, matchedCharacters);
         }
       } else {
-        characterCount += characters.length;
+        characterCount += allCharacters.length;
       }
+    });
+
+    if (query) {
+      status.textContent =
+        workCount + "件の作品・" +
+        characterCount + "人のキャラクターが見つかりました。";
+    } else {
+      status.textContent =
+        workCount + "件の作品・" +
+        characterCount + "人のキャラクターを掲載しています。";
     }
-  });
 
-  if (query) {
-    status.textContent =
-      workCount + "件の作品・" +
-      characterCount + "人のキャラクターが見つかりました。";
-  } else {
-    status.textContent =
-      workCount + "件の作品・" +
-      characterCount + "人のキャラクターを掲載しています。";
+    if (workCount === 0 && query) {
+      status.textContent =
+        "該当する作品・キャラクターは見つかりませんでした。";
+    }
   }
 
-  if (workCount === 0 && query) {
-    status.textContent = "該当する作品・キャラクターは見つかりませんでした。";
-  }
-}
-
-searchInput.addEventListener("input", search);
+  searchInput.addEventListener("input", search);
+})();
 </script>
 </body>
 </html>

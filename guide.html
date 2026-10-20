@@ -102,21 +102,7 @@
     <p>※トリップの付け方が分からない場合はお気軽にお聞きください！</p>
 
     <div class="agate-card">
-      <p class="mini-label">COPY TEMPLATE / 目印の例</p>
-      <p>必要な項目だけ書き換えて使ってください。</p>
-      <pre id="markTemplate">名前：
-作品・キャラクター：
-目印：
-前回の訪問について：
-（例：以前もお邪魔しました／今回が初めてです）</pre>
-      <button type="button" class="copy-button" id="copyMark">
-        テンプレートをコピー
-      </button>
-      <p id="copyStatus" class="copy-status" aria-live="polite"></p>
-      <p class="small-note">
-        ※すべて記入する必要はありません。普段使っている名前や目印だけでも大丈夫です。
-      </p>
-    </div>
+ 
 
     <blockquote>
       <strong>今まで来てくださった目印さん一覧</strong><br>
@@ -194,40 +180,6 @@
   aria-label="ページ上部へ戻る">↑</a>
 
 <script src="script.js"></script>
-<script>
-(function () {
-  const button = document.getElementById("copyMark");
-  const template = document.getElementById("markTemplate");
-  const status = document.getElementById("copyStatus");
 
-  if (!button || !template || !status) return;
-
-  button.addEventListener("click", async function () {
-    const text = template.textContent;
-
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const area = document.createElement("textarea");
-        area.value = text;
-        area.style.position = "fixed";
-        area.style.opacity = "0";
-        document.body.appendChild(area);
-        area.focus();
-        area.select();
-        const success = document.execCommand("copy");
-        area.remove();
-        if (!success) throw new Error("copy failed");
-      }
-
-      status.textContent = "コピーしました！";
-    } catch (error) {
-      status.textContent =
-        "自動コピーできませんでした。テンプレートを長押ししてコピーしてください。";
-    }
-  });
-})();
-</script>
 </body>
 </html>

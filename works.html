@@ -95,7 +95,7 @@
         data-work="転生したらスライムだった件"
         data-characters="リムル|シュナ|ディアブロ|ヴェルドラ|ベニマル">
         <summary>転生したらスライムだった件
-          <span class="work-count">5名</span>
+          <span class="work-count"></span>
         </summary>
         <p>リムル／シュナ／ディアブロ／ヴェルドラ／ベニマル</p>
       </details>
@@ -103,56 +103,68 @@
       <details class="work" open
         data-work="プロジェクトセカイ カラフルステージ feat.初音ミク"
         data-characters="各ユニットメンバー|各セカイのバーチャルシンガー">
-        <summary>プロジェクトセカイ カラフルステージ feat.初音ミク</summary>
+        <summary>プロジェクトセカイ カラフルステージ feat.初音ミク
+          <span class="work-count"></span>
+        </summary>
         <p>各ユニットメンバー／各セカイのバーチャルシンガー</p>
       </details>
 
       <details class="work" open
         data-work="ツイステッドワンダーランド"
         data-characters="NRC生徒">
-        <summary>ツイステッドワンダーランド</summary>
+        <summary>ツイステッドワンダーランド
+          <span class="work-count"></span>
+        </summary>
         <p>NRC生徒</p>
       </details>
 
       <details class="work" open
         data-work="SHOW BY ROCK!!"
         data-characters="ましゅましゅ|クリクリ|レイジン|どこゆび|プラマジメンバー">
-        <summary>SHOW BY ROCK!!</summary>
+        <summary>SHOW BY ROCK!!
+          <span class="work-count"></span>
+        </summary>
         <p>ましゅましゅ／クリクリ／レイジン／どこゆび／プラマジメンバー</p>
       </details>
 
       <details class="work" open
         data-work="呪術廻戦"
         data-characters="釘崎野薔薇|夏油傑">
-        <summary>呪術廻戦 <span class="work-count">2名</span></summary>
+        <summary>呪術廻戦 <span class="work-count"></span></summary>
         <p>釘崎野薔薇／夏油傑</p>
       </details>
 
       <details class="work" open
         data-work="薬屋のひとりごと"
         data-characters="猫猫|壬氏|小蘭|子翠">
-        <summary>薬屋のひとりごと <span class="work-count">4名</span></summary>
+        <summary>薬屋のひとりごと <span class="work-count"></span></summary>
         <p>猫猫／壬氏／小蘭／子翠</p>
       </details>
 
       <details class="work" open
         data-work="ラブライブ！"
         data-characters="μ’s|Aqours|虹ヶ咲">
-        <summary>ラブライブ！</summary>
+        <summary>ラブライブ！
+          <span class="work-count"></span>
+        </summary>
         <p>μ’s／Aqours／虹ヶ咲</p>
       </details>
 
       <details class="work" open
         data-work="ピュティフィ"
         data-characters="アンコ|ヒナ|八芽|美月|まり子">
-        <summary>ピュティフィ</summary>
+        <summary>ピュティフィ
+          <span class="work-count"></span>
+        </summary>
         <p>天才JKシリーズ、ギャルとオタクの日常シリーズの4人（アンコ、ヒナ、八芽、美月）、まり子 etc</p>
       </details>
 
       <details class="work" open
         data-work="アイカツ！"
         data-characters="デミカツ以外のメインキャラクター">
-        <summary>アイカツ！</summary>
+        <summary>アイカツ！
+          <span class="work-count"></span>
+        </summary>
         <p>デミカツ以外のメインキャラクター</p>
         <p>曲は聞いていたものの追おう追おうと思っていたらメインコンテンツが……推しは推せる時に推しましょう（自戒）</p>
       </details>
@@ -189,6 +201,21 @@
   const works = [...document.querySelectorAll("#worksList .work")];
 
   if (!searchInput || !status || !works.length) return;
+
+  // data-characters に登録された項目数を自動表示
+  function updateCharacterCounts() {
+    works.forEach(work => {
+      const names = (work.dataset.characters || "")
+        .split("|")
+        .filter(name => name.trim() !== "");
+
+      const count = work.querySelector(".work-count");
+
+      if (count) {
+        count.textContent = names.length + "名";
+      }
+    });
+  }
 
   const aliases = [
     { name: "猫猫", aliases: ["まおまお", "マオマオ", "maomao", "mao mao"] },
@@ -351,6 +378,7 @@
 
     let workCount = 0;
     let characterCount = 0;
+    let matchedWorkTitles = 0;
 
     works.forEach(work => {
       const title = normalize(work.dataset.work || "");
@@ -359,7 +387,8 @@
         ? getCharacterMatches(work, query)
         : [];
 
-      const matches = !query || titleMatches || matchedCharacters.length > 0;
+      const matches =
+        !query || titleMatches || matchedCharacters.length > 0;
 
       work.hidden = !matches;
 
@@ -367,45 +396,51 @@
 
       workCount++;
 
-      const allCharacters = (work.dataset.characters || "")
-        .split("|")
-        .filter(Boolean);
+      if (titleMatches) {
+        matchedWorkTitles++;
+        boldWorkTitle(work);
+      }
 
       if (query) {
         characterCount += matchedCharacters.length;
-
-        if (titleMatches) {
-          boldWorkTitle(work);
-        }
 
         if (matchedCharacters.length > 0) {
           boldCharacters(work, matchedCharacters);
         }
       } else {
-        characterCount += allCharacters.length;
+        characterCount += (work.dataset.characters || "")
+          .split("|")
+          .filter(name => name.trim() !== "").length;
       }
     });
 
     if (!query) {
-  status.textContent =
-    workCount + "件の作品・" +
-    characterCount + "人のキャラクターを掲載しています。";
-} else if (workCount === 0) {
-  status.textContent =
-    "該当する作品・キャラクターは見つかりませんでした。";
-} else if (characterCount === 1) {
-  status.textContent =
-    "1人のキャラクターが見つかりました。";
-} else if (workCount === 1 && characterCount === 0) {
-  status.textContent =
-    "1件の作品が見つかりました。";
-} else {
-  status.textContent =
-    workCount + "件の作品・" +
-    characterCount + "人のキャラクターが見つかりました。";
-}
+      status.textContent =
+        workCount + "件の作品・" +
+        characterCount + "人のキャラクターを掲載しています。";
+    } else if (workCount === 0) {
+      status.textContent =
+        "該当する作品・キャラクターは見つかりませんでした。";
+    } else if (matchedWorkTitles === 1 && workCount === 1) {
+      status.textContent =
+        "1件の作品が見つかりました。";
+    } else if (matchedWorkTitles === workCount && workCount > 0) {
+      status.textContent =
+        workCount + "件の作品が見つかりました。";
+    } else if (characterCount === 1) {
+      status.textContent =
+        "1人のキャラクターが見つかりました。";
+    } else if (characterCount > 0 && matchedWorkTitles === 0) {
+      status.textContent =
+        characterCount + "人のキャラクターが見つかりました。";
+    } else {
+      status.textContent =
+        workCount + "件の作品・" +
+        characterCount + "人のキャラクターが見つかりました。";
+    }
   }
 
+  updateCharacterCounts();
   searchInput.addEventListener("input", search);
 })();
 </script>

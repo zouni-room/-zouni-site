@@ -386,20 +386,24 @@
       }
     });
 
-    if (query) {
-      status.textContent =
-        workCount + "件の作品・" +
-        characterCount + "人のキャラクターが見つかりました。";
-    } else {
-      status.textContent =
-        workCount + "件の作品・" +
-        characterCount + "人のキャラクターを掲載しています。";
-    }
-
-    if (workCount === 0 && query) {
-      status.textContent =
-        "該当する作品・キャラクターは見つかりませんでした。";
-    }
+    if (!query) {
+  status.textContent =
+    workCount + "件の作品・" +
+    characterCount + "人のキャラクターを掲載しています。";
+} else if (workCount === 0) {
+  status.textContent =
+    "該当する作品・キャラクターは見つかりませんでした。";
+} else if (characterCount === 1) {
+  status.textContent =
+    "1人のキャラクターが見つかりました。";
+} else if (workCount === 1 && characterCount === 0) {
+  status.textContent =
+    "1件の作品が見つかりました。";
+} else {
+  status.textContent =
+    workCount + "件の作品・" +
+    characterCount + "人のキャラクターが見つかりました。";
+}
   }
 
   searchInput.addEventListener("input", search);

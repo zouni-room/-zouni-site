@@ -422,3 +422,18 @@ html.js-enabled .reveal.is-visible { opacity: 1; transform: translateY(0); }
 .page-banner::after {
 content: none !important;
 }
+
+
+/* 方針・交流ページ：目次を1行ずつ縦に並べる */
+.guide-index {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+}
+
+.guide-index a {
+  display: block;
+  padding: 9px 4px;
+  border-bottom: 1px solid var(--line);
+}
